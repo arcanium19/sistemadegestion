@@ -11,7 +11,7 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    lastname: {
+    last_name: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -26,11 +26,7 @@ module.exports = (sequelize) => {
     password: {
       type: DataTypes.STRING,
       allowNull: false,
-    },
-    email_verified: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false,
-    },
+    }
   });
 
   return User;

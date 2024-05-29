@@ -11,6 +11,7 @@ const errorHandler = (err, req, res, next) => {
 
   if (err instanceof ClientError) {
     // Si el error es una instancia de ClientError, envía una respuesta con el mensaje de error y el código de estado adecuado
+    console.error('Client Error Messagge:', err.message);
     return res.status(err.statusCode).json({
       error: true,
       message: err.message
