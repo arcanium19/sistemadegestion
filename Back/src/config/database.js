@@ -7,12 +7,12 @@ const sequelize = new Sequelize(`${DB_INTERFACE}://${DB_USER}:${DB_PASSWORD}@${D
 	native: false
 })
 
-const User = require('../models/user.models')(sequelize);
+const User = require('../models/user.models')(sequelize)
 
 module.exports = {
 	sequelize,
 	models: {
-	  User,
-	  // Puedes agregar más modelos aquí si los tienes
+		User,
+		// Puedes agregar más modelos aquí si los tienes
 	},
-};
+}
