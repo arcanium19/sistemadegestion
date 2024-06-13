@@ -4,11 +4,11 @@ const { sequelize } = require('./src/config/database')
 
 server.listen(`${config.PORT}`, async () => {
 	try {
-		await sequelize.sync({force: true})
+		await sequelize.sync({ force: true })
 		console.log(`Server running on port: ${config.PORT}`)
 		console.log('Database synchronized successfully.')
 	} catch (error) {
 		console.log('ERROR:', error.message)
 	}
-    
+
 })

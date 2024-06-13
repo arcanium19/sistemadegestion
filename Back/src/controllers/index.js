@@ -8,5 +8,26 @@ module.exports = {
 		deleteUser: catchedAsync(require('./user.controllers/deleteUser')),
 		updateUser: catchedAsync(require('./user.controllers/updateUser')),
 		loginUser: catchedAsync(require('./user.controllers/loginUser')),
+	},
+	client: {
+		getAllClient: catchedAsync(require('./client.controllers/getAllClient')),
+		getClientById: catchedAsync(require('./client.controllers/getClientById')),
+		createClient: catchedAsync(require('./client.controllers/createClient')),
+		deleteClient: catchedAsync(require('./client.controllers/deleteClient')),
+		updateClient: catchedAsync(require('./client.controllers/updateClient')),
+	},
+	employee: {
+		getAllEmployee: catchedAsync(require('./employee.controllers/getAllEmployee')),
+		getEmployeeById: catchedAsync(require('./employee.controllers/getEmployeeById')),
+		createEmployee: catchedAsync(require('./employee.controllers/createEmployee')),
+		deleteEmployee: catchedAsync(require('./employee.controllers/deleteEmployee')),
+		updateEmployee: catchedAsync(require('./employee.controllers/updateEmployee')),
+	},
+	project: {
+		getAllProject: catchedAsync(require('./project.controllers/getAllProjects')),
+		getProjectById: catchedAsync(require('./project.controllers/getProjectById')),
+		createProject: catchedAsync(require('./project.controllers/createProject')),
+		deleteProject: catchedAsync(require('./project.controllers/deteleProject')),
+		updateProject: catchedAsync(require('./project.controllers/updateProject')),
 	}
 }
