@@ -9,6 +9,7 @@ module.exports = (sequelize) => {
 		},
 		name: {
 			type: DataTypes.STRING,
+			unique: true,
 			allowNull: false
 		},
 		unit: {
@@ -19,9 +20,14 @@ module.exports = (sequelize) => {
 			type: DataTypes.FLOAT,
 			allowNull: false
 		},
-		price:{
+		price: {
 			type: DataTypes.FLOAT,
 			allowNull: false
+		},
+		code: {
+			type: DataTypes.DECIMAL,
+			allowNull: false,
+			unique: true
 		}
 	})
 }

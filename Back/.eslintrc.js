@@ -29,5 +29,13 @@ module.exports = {
 			'error',
 			'never'
 		]
-	}
+	},
+	"overrides": [
+    {
+      "files": ["/src/__tests__/**/*"],
+      "env": {
+        "jest": true
+      }
+    }
+  ]
 }

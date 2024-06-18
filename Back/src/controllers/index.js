@@ -27,7 +27,23 @@ module.exports = {
 		getAllProject: catchedAsync(require('./project.controllers/getAllProjects')),
 		getProjectById: catchedAsync(require('./project.controllers/getProjectById')),
 		createProject: catchedAsync(require('./project.controllers/createProject')),
-		deleteProject: catchedAsync(require('./project.controllers/deteleProject')),
+		deleteProject: catchedAsync(require('./project.controllers/deleteProject')),
 		updateProject: catchedAsync(require('./project.controllers/updateProject')),
-	}
+	},
+	tool: {
+		getAllTool: catchedAsync(require('./tool.controllers/getAllTools')),
+		getToolById: catchedAsync(require('./tool.controllers/getToolById')),
+		createTool: catchedAsync(require('./tool.controllers/createTool')),
+		deleteTool: catchedAsync(require('./tool.controllers/deleteTool')),
+		updateTool: catchedAsync(require('./tool.controllers/updateTool')),
+	},
+	stock: {
+		getAllStock: catchedAsync(require('./materialStock.controllers/getAllStock')),
+		getStockById: catchedAsync(require('./materialStock.controllers/getStockById')),
+		getStockByCode: catchedAsync(require('./materialStock.controllers/getStockByCode')),
+		getStockByName: catchedAsync(require('./materialStock.controllers/getStockByName')),
+		createStock: catchedAsync(require('./materialStock.controllers/createNewStock')),
+		deleteStock: catchedAsync(require('./materialStock.controllers/deleteStock')),
+		updateStock: catchedAsync(require('./materialStock.controllers/updateStock')),
+	},
 }

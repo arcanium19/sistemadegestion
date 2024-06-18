@@ -1,10 +1,13 @@
 const { models, sequelize } = require('../../config/database')
 const { response } = require('../../utils')
+const { ClientError } = require('../../utils/errors')
 
 module.exports = async (req, res) => {
 	let transaction = await sequelize.transaction()
 
 	const { client_id, estimated_price, final_price, employees, tools } = req.body
+
+	if(!client_id || !estimated_price || !employees || !tools) throw new ClientError('Debe completar todos los campos obligatorios', 400)
 
 	if (employees !== undefined && Array.isArray(employees) && employees.length > 0) {
 		const employeesExist = await models.Employee.findAll({
@@ -15,7 +18,7 @@ module.exports = async (req, res) => {
 
 		if (employeesExist.length !== employees.length) {
 			await transaction.rollback()
-			throw new Error('Uno o más empleados no existen.')
+			throw new ClientError('Uno o más empleados no existen.', 400)
 		}
 
 		const toolsExist = await models.Tool.findAll({
@@ -26,7 +29,7 @@ module.exports = async (req, res) => {
 
 		if (toolsExist.length !== tools.length) {
 			await transaction.rollback()
-			throw new Error('Una o más herramientas no existen.')
+			throw new ClientError('Una o más herramientas no existen.', 400)
 		}
 	}
 

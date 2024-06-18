@@ -10,5 +10,5 @@ module.exports = async (req, res) => {
 	})
 
 	if(!data) throw new ClientError('Usuario no encontrado.', 404)
-	response(res, 201, data)
+	response(res, 200, data)
 }

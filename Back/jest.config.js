@@ -3,5 +3,5 @@ module.exports = {
 	clearMocks: true,
 	coverageDirectory: 'coverage',
 	testTimeout: 30000,
-	testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.jsx?$'
+	testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.js?$'
 }
