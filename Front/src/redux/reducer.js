@@ -1,31 +1,50 @@
-import { 
-	FETCH_USER_REQUEST, FETCH_USER_SUCCESS, FETCH_USER_FAILURE,
-	FETCH_PRODUCTS_REQUEST, FETCH_PRODUCTS_SUCCESS, FETCH_PRODUCTS_FAILURE
+import {
+	FETCH_CLIENTS_REQUEST,
+	FETCH_CLIENTS_SUCCESS,
+	FETCH_CLIENTS_FAILURE,
   } from './actions';
   
   const initialState = {
-	user: { data: null, loading: false, error: null },
-	products: { data: [], loading: false, error: null }
+	clients: {
+		totalItems: 0,
+		totalPages: 1,
+		currentPage: 1,
+		clients: []
+	},
+	loading: false,
+	error: null,
+	
   };
   
-  const rootReducer = (state = initialState, action) => {
+  const reducer = (state = initialState, action) => {
 	switch (action.type) {
-	  case FETCH_USER_REQUEST:
-		return { ...state, user: { ...state.user, loading: true, error: null } };
-	  case FETCH_USER_SUCCESS:
-		return { ...state, user: { data: action.payload, loading: false, error: null } };
-	  case FETCH_USER_FAILURE:
-		return { ...state, user: { ...state.user, loading: false, error: action.error } };
-	  case FETCH_PRODUCTS_REQUEST:
-		return { ...state, products: { ...state.products, loading: true, error: null } };
-	  case FETCH_PRODUCTS_SUCCESS:
-		return { ...state, products: { data: action.payload, loading: false, error: null } };
-	  case FETCH_PRODUCTS_FAILURE:
-		return { ...state, products: { ...state.products, loading: false, error: action.error } };
+	  case FETCH_CLIENTS_REQUEST:
+		return {
+		  ...state,
+		  loading: true,
+		  error: null,
+		};
+	  case FETCH_CLIENTS_SUCCESS:
+		return {
+		  ...state,
+		  loading: false,
+		  clients: {
+			clients: action.payload.clients,
+		  	totalItems: action.payload.totalItems,
+		  	totalPages: action.payload.totalPages,
+		  	currentPage: action.payload.currentPage,
+		  }
+		};
+	  case FETCH_CLIENTS_FAILURE:
+		return {
+		  ...state,
+		  loading: false,
+		  error: action.payload,
+		};
 	  default:
 		return state;
 	}
   };
   
-  export default rootReducer;
+  export default reducer;
   

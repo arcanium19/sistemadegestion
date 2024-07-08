@@ -1,0 +1,108 @@
+[
+    {
+      "id": "1e4d5f60-6584-4e21-8a27-4a85aee8cb10",
+      "name": "Juan Pérez",
+      "contact": "+54 9 381 123 4567",
+      "email": "juan.perez@example.com",
+      "new_service_request": "Necesito soporte técnico para mi sistema."
+    },
+    {
+      "id": "3d2f8c1b-83db-4c38-bfa3-36e08b5f91f8",
+      "name": "María García",
+      "contact": "+54 9 381 234 5678",
+      "email": "maria.garcia@example.com",
+      "new_service_request": "Solicitud de instalación de software."
+    },
+    {
+      "id": "5a3c9d92-5216-44d4-b9ae-540ba1f4a1b7",
+      "name": "Carlos López",
+      "contact": "+54 9 381 345 6789",
+      "email": "carlos.lopez@example.com",
+      "new_service_request": "Problemas con el hardware."
+    },
+    {
+      "id": "7e5f6b32-ec7f-45d9-8c87-9dbcb0a97f4e",
+      "name": "Ana Martínez",
+      "contact": "+54 9 381 456 7890",
+      "email": "ana.martinez@example.com",
+      "new_service_request": "Consulta sobre servicios de nube."
+    },
+    {
+      "id": "9f6e5c41-ef80-453b-b39b-745aad832edc",
+      "name": "Luis Fernández",
+      "contact": "+54 9 381 567 8901",
+      "email": "luis.fernandez@example.com",
+      "new_service_request": "Revisión de seguridad informática."
+    },
+    {
+      "id": "b07a6f52-4312-488d-90e1-834fc013e8d5",
+      "name": "Laura Sánchez",
+      "contact": "+54 9 381 678 9012",
+      "email": "laura.sanchez@example.com",
+      "new_service_request": "Configuración de red local."
+    },
+    {
+      "id": "d12e3f63-5641-42d9-9213-f7dc5f4b7e8f",
+      "name": "Miguel Ramírez",
+      "contact": "+54 9 381 789 0123",
+      "email": "miguel.ramirez@example.com",
+      "new_service_request": "Actualización de software."
+    },
+    {
+      "id": "f34b2a74-7a13-44a9-ae68-fde4a0f8c8a9",
+      "name": "Sofía Torres",
+      "contact": "+54 9 381 890 1234",
+      "email": "sofia.torres@example.com",
+      "new_service_request": "Instalación de sistema operativo."
+    },
+    {
+      "id": "118c4d85-1b35-41d7-b87e-d3f8a9b3a2b0",
+      "name": "Roberto Díaz",
+      "contact": "+54 9 381 901 2345",
+      "email": "roberto.diaz@example.com",
+      "new_service_request": "Reparación de equipos."
+    },
+    {
+      "id": "23ad5e96-3d59-42e9-bf8e-f6a4b9b3c4e1",
+      "name": "Lucía Gómez",
+      "contact": "+54 9 381 012 3456",
+      "email": "lucia.gomez@example.com",
+      "new_service_request": "Consultoría en TI."
+    },
+    {
+      "id": "35cf6fa7-4f7a-43da-8c9e-08a5d0b7e2d2",
+      "name": "Pedro Morales",
+      "contact": "+54 9 381 123 4567",
+      "email": "pedro.morales@example.com",
+      "new_service_request": "Optimización de sistemas."
+    },
+    {
+      "id": "47e08fb8-5f91-45ab-bdcf-f7e6b7b4a3f3",
+      "name": "Natalia Ruiz",
+      "contact": "+54 9 381 234 5678",
+      "email": "natalia.ruiz@example.com",
+      "new_service_request": "Capacitación en nuevas tecnologías."
+    },
+    {
+      "id": "59f19fca-71a3-4a8c-9eb7-08f9b9b5d4f4",
+      "name": "Hugo Castillo",
+      "contact": "+54 9 381 345 6789",
+      "email": "hugo.castillo@example.com",
+      "new_service_request": "Asesoría en compra de equipos."
+    },
+    {
+      "id": "6a23b0db-8334-4ab9-9bc8-0afaf9d5e5e5",
+      "name": "Elena Ortiz",
+      "contact": "+54 9 381 456 7890",
+      "email": "elena.ortiz@example.com",
+      "new_service_request": "Migración de datos."
+    },
+    {
+      "id": "7b34c1ec-9457-4bac-aebb-0bfbb0e6f6f6",
+      "name": "Fernando Reyes",
+      "contact": "+54 9 381 567 8901",
+      "email": "fernando.reyes@example.com",
+      "new_service_request": "Implementación de ERP."
+    }
+  ]
+  

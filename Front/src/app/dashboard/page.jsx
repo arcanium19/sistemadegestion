@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import Loading from '@/components/loading/Loading';
 import NavBar from '@/components/navbar/NavBar';
 import Statistics from '@/components/views/statistics';
+import Clients from '@/components/views/Clients';
 
 export default function Dashboard() {
   const router = useRouter();
@@ -15,7 +16,7 @@ export default function Dashboard() {
     if (path === '') {
       setActiveComponent('home');
     } else if (path === '#client') {
-      setActiveComponent('component2');
+      setActiveComponent('client');
     }
     setLoading(false); // Simula el tiempo de carga
   }, [router]);
@@ -35,6 +36,8 @@ export default function Dashboard() {
         return <Statistics />;
       case 'component2':
         return <Component2 />;
+      case 'client':
+        return <Clients />;
       default:
         return <Statistics />;
     }
