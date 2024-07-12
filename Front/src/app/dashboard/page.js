@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Loading from '@/components/loading/Loading';
 import NavBar from '@/components/navbar/NavBar';
+import Statistics from '@/components/views/statistics';
 
 export default function Dashboard() {
   const router = useRouter();
@@ -12,8 +13,8 @@ export default function Dashboard() {
 
   useEffect(() => {
     const path = window.location.hash;
-    if (path === '#user') {
-      setActiveComponent('component1');
+    if (path === '') {
+      setActiveComponent('home');
     } else if (path === '#client') {
       setActiveComponent('component2');
     }
@@ -31,19 +32,19 @@ export default function Dashboard() {
 
   const renderComponent = () => {
     switch (activeComponent) {
-      case 'component1':
-        return <Component1 />;
+      case 'home':
+        return <Statistics />;
       case 'component2':
         return <Component2 />;
       default:
-        return <Component1 />;
+        return <Statistics />;
     }
   };
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-b from-dark to-gray-dark">
+    <div className="flex min-h-screen bg-gradient-to-b from-dark to-dark-gray">
       <NavBar handleNavigation={handleNavigation} />
-      <div className="w-4/5 p-4">
+      <div className="w-4/5 pl-0 p-4">
         {loading ? (
           <Loading />
         ) : (
