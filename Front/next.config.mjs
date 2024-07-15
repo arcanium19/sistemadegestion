@@ -1,5 +1,5 @@
 /** @type {import('next').NextConfig} */
-const ip = process.env.MY_IP || 'localhost';
+const ip = process.env.NEXT_PUBLIC_HOST || 'localhost';
 
 const nextConfig = {
     server: {
