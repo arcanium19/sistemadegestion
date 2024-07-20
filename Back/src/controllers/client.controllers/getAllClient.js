@@ -3,9 +3,23 @@ const { response } = require('../../utils')
 const { ClientError } = require('../../utils/errors')
 
 module.exports = async (req, res) => {
-	const clients = await models.Client.findAll()
+	const page = parseInt(req.query.page) || 1
+	const limit = parseInt(req.query.limit) || 10
+	const offset = (page - 1) * limit
 
-	if(!clients) throw new ClientError('Ocurrio un error, intentelo de nuevo.', 400)
-		
-	response(res, 201, clients)
+	const { count, rows } = await models.Client.findAndCountAll({
+		limit,
+		offset,
+	})
+
+	if (!rows) throw new ClientError('Ocurrió un error, intentelo de nuevo.', 400)
+
+	const totalPages = Math.ceil(count / limit)
+
+	response(res, 200, {
+		totalItems: count,
+		totalPages,
+		currentPage: page,
+		clients: rows,
+	})
 }

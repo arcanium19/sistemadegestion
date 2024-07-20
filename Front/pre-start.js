@@ -28,9 +28,12 @@ try {
 }
 
 // Escribir la dirección IP y puerto en .env.local
-const envContent = `NEXT_PUBLIC_HOST=${ip}\nNEXT_PUBLIC_PORT=3000\n`;
+const envContent = `
+	NEXT_PUBLIC_HOST=${ip}\n
+	NEXT_PUBLIC_PORT=3000\n
+	NEXT_PUBLIC_GOOGLE_CLIENT_ID = 486944814164-6mhd63phrmmr8jr2b6ml0fdnidb85n9l.apps.googleusercontent.com\n
+	NEXT_PUBLIC_GOOGLE_CLIENT_SECRET = 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\n`;
 fs.writeFileSync('.env.local', envContent);
 
 console.log(`Dirección IP detectada: ${ip}`);
 console.log('Variables de entorno NEXT_PUBLIC_HOST y NEXT_PUBLIC_PORT guardadas en .env.local');
-

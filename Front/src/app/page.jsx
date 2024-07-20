@@ -1,25 +1,28 @@
 "use client";
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const router = useRouter();
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
     // Aquí podrías agregar la lógica de autenticación
-    router.push('/dashboard');
+    router.push("/dashboard");
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md p-8 space-y-6 bg-white shadow-lg rounded-xl">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-dark to-dark-gray">
+      <div className="w-full max-w-md p-8 space-y-6 bg-white shadow-lg shadow-black rounded-xl">
         <h2 className="text-2xl font-bold text-center text-blue-600">Login</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="username" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="username"
+              className="block text-sm font-medium text-gray-700"
+            >
               Username
             </label>
             <input
@@ -33,7 +36,10 @@ export default function Home() {
             />
           </div>
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-700"
+            >
               Password
             </label>
             <input
@@ -57,4 +63,3 @@ export default function Home() {
     </div>
   );
 }
-
