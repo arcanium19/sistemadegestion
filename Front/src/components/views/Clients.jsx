@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/navigation';
 import { fetchClients } from '@/redux/actions';
 import Loading from '../loading/Loading';
+import PaginationComponent from '../pagination/Pagination';
+import ClientCard from '../cards/Clients-card';
 
 const Clients = () => {
   const dispatch = useDispatch();
@@ -20,7 +22,7 @@ const Clients = () => {
     router.push(`/clients/${clientId}`);
   };
 
-  const handlePageChange = (newPage) => {
+  const handlePageChange = (event, newPage) => {
     setPage(newPage);
   };
 
@@ -28,34 +30,22 @@ const Clients = () => {
   if (error) return <p>Error: {error}</p>;
 
   return (
-    <div>
-      <h1>Clientes</h1>
-      {
-      clients?.length === 0 ? (
+    <div className="min-h-full flex flex-col">
+      {clients?.length === 0 ? (
         <p>No se han creado clientes aún...</p>
       ) : (
-        <ul>
+        <ul className="flex-1 overflow-y-auto">
           {clients?.map((client) => (
-            <li key={client.id} onClick={() => handleClientClick(client.id)}>
-              {client.name}
-            </li>
+            <ClientCard key={client.id} client={client} />
           ))}
         </ul>
       )}
-      <div>
-        <button 
-          onClick={() => handlePageChange(page - 1)} 
-          disabled={page === 1}
-        >
-          Anterior
-        </button>
-        <span> Página {currentPage} de {totalPages} </span>
-        <button 
-          onClick={() => handlePageChange(page + 1)} 
-          disabled={page === totalPages}
-        >
-          Siguiente
-        </button>
+      <div className="flex justify-center items-end h-12">
+        <PaginationComponent
+          page={page}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
       </div>
     </div>
   );

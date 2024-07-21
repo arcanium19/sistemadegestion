@@ -16,7 +16,22 @@
   }
 }
 
+@font-face {
+  font-family: "SourceSans3";
+  src: url("/fonts/SourceSans3.ttf") format("ttf");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "SourceSans3";
+  src: url("/fonts/SourceSans3-Italic.ttf") format("ttf");
+  font-weight: normal;
+  font-style: italic;
+}
+
 body {
+  font-family: "SourceSans3", sans-serif;
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(
       to bottom,
@@ -27,16 +42,16 @@ body {
 }
 
 @keyframes rotate {
-	0% {
-	  transform: rotate(0deg);
-	}
-	100% {
-	  transform: rotate(360deg);
-	}
+  0% {
+    transform: rotate(0deg);
   }
-  
-  .loader .rotate {
-	animation: rotate 2s linear infinite;
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loader .rotate {
+  animation: rotate 2s linear infinite;
 }
 
 @layer utilities {
