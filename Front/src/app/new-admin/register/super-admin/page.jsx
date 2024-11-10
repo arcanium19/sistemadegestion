@@ -1,31 +1,20 @@
 "use client";
+import axios from "axios";
 import Loading from "@/components/loading/Loading";
-import { registerUser, resetErrorState, resetUserState } from "@/redux/actions";
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux"; // Importa useDispatch
+import { useRouter } from "next/navigation";
 
 const RegistrationForm = () => {
-  const dispatch = useDispatch(); // Inicializa dispatch
-  const error = useSelector((state) => state.error);
-  const loading = useSelector((state) => state.loading);
-  const user = useSelector((state) => state.user);
+  const router = useRouter();
   const [formData, setFormData] = useState({
     name: "",
     last_name: "",
     email: "",
     password: "",
   });
-
-  useEffect(() => {
-    if (error) {
-      alert(error);
-	  dispatch(resetErrorState())
-    }
-    if (user) {
-      alert(user?.data);
-	  dispatch(resetUserState())
-    }
-  }, [error, user, dispatch]);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [register, setRegister] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -37,7 +26,22 @@ const RegistrationForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(registerUser(formData));
+    setLoading(true);
+    setErrorMessage(null); // Resetea el mensaje de error
+
+    try {
+      const response = await axios.post(`http://${process.env.NEXT_PUBLIC_HOST}:${process.env.NEXT_PUBLIC_PORT_BACKEND}/api/user`, formData);
+
+      setRegister(response.data); // Almacena la respuesta en `register`
+      alert(response.data.message || "Registro exitoso"); // Alerta el mensaje del backend
+      router.push("/"); // Redirige al usuario
+    } catch (error) {
+      setErrorMessage(
+        error.response?.data?.message || "Error en el registro"
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -118,6 +122,11 @@ const RegistrationForm = () => {
                 required
               />
             </div>
+            {errorMessage && (
+              <p className="text-red-500 text-sm text-center">
+                {errorMessage}
+              </p>
+            )}
             <button
               type="submit"
               className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700"

@@ -4,12 +4,12 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import Loading from "../loading/Loading";
 import PaginationComponent from "../pagination/Pagination";
-import ClientCard from "../cards/Clients-card";
+import EmployeeCard from "../cards/Employees-card";
 import ButtonOption from "../buttons/ButtonOption";
 
-const Clients = () => {
-  const [clientsData, setClientsData] = useState({
-    clients: [],
+const Employees = () => {
+  const [employeesData, setEmployeesData] = useState({
+    employees: [],
     totalItems: 0,
     totalPages: 0,
     currentPage: 1,
@@ -19,21 +19,21 @@ const Clients = () => {
   const [page, setPage] = useState(1);
   const router = useRouter();
 
-  // Función para obtener clientes
-  const fetchClients = async (page) => {
+  // Función para obtener empleados
+  const fetchEmployees = async (page) => {
     setLoadingPagination(true); // Activar loading de paginación
     try {
       const response = await axios.get(
-        `http://${process.env.NEXT_PUBLIC_HOST}:${process.env.NEXT_PUBLIC_PORT_BACKEND}/api/client/`,
+        `http://${process.env.NEXT_PUBLIC_HOST}:${process.env.NEXT_PUBLIC_PORT_BACKEND}/api/employee/`,
         {
           params: { page, limit: 10 },
         }
       );
-      const { clients, totalItems, totalPages, currentPage } =
+      const { employees, totalItems, totalPages, currentPage } =
         response.data.data;
-      setClientsData({ clients, totalItems, totalPages, currentPage });
+      setEmployeesData({ employees, totalItems, totalPages, currentPage });
     } catch (error) {
-      console.error("Error al obtener clientes:", error.message);
+      console.error("Error al obtener empleados:", error.message);
     } finally {
       setLoadingPagination(false); // Desactivar loading de paginación
     }
@@ -43,7 +43,7 @@ const Clients = () => {
   useEffect(() => {
     const loadData = async () => {
       setLoadingInitial(true); // Activar loading inicial
-      await fetchClients(page);
+      await fetchEmployees(page);
       setLoadingInitial(false); // Desactivar loading inicial
     };
     loadData();
@@ -52,25 +52,11 @@ const Clients = () => {
   // Función para cambiar de página
   const handlePageChange = (event, newPage) => {
     setPage(newPage);
-    fetchClients(newPage); // Llamada al backend para cambiar de página
+    fetchEmployees(newPage); // Llamada al backend para cambiar de página
   };
 
-  const handleClientClick = (clientId) => {
-    router.push(`/clients/${clientId}`);
-  };
-
-  const handleDeleteClient = async (clientId) => {
-    try {
-      const response = await axios.delete(
-        `http://${process.env.NEXT_PUBLIC_HOST}:${process.env.NEXT_PUBLIC_PORT_BACKEND}/api/clients/${clientId}`
-      );
-      if (response.status === 200) {
-        // Si la eliminación fue exitosa, actualizamos la lista
-        fetchClients(page);
-      }
-    } catch (error) {
-      console.error("Error al eliminar cliente:", error.message);
-    }
+  const handleEmployeeClick = (employeeId) => {
+    router.push(`/employees/${employeeId}`);
   };
 
   // Renderizado del componente
@@ -91,30 +77,33 @@ const Clients = () => {
       ) : (
         <div className="flex flex-col flex-grow">
           <div className="flex flex-col -left-full my-3">
-			<h1 className="text-3xl text-center py-4">CLIENTES</h1>
-			<ButtonOption actionType="New" additionalText="NUEVO Cliente" onClick={()=> console.log('Nuevo cliente')} />
-		  </div>
-          {clientsData.totalItems > 0 ? (
+            <h1 className="text-3xl text-center py-4">EMPLEADOS</h1>
+            <ButtonOption
+              actionType="New"
+              additionalText="NUEVO EMPLEADO"
+              onClick={() => console.log("Nuevo empleado")}
+            />
+          </div>
+          {employeesData.totalItems > 0 ? (
             <>
-              {/* Mostrar loading de paginación en el área de clientes */}
+              {/* Mostrar loading de paginación en el área de empleados */}
               <ul className="flex-grow overflow-y-auto">
                 {loadingPagination ? (
                   <Loading />
                 ) : (
-                  clientsData.clients.map((client) => (
-                    <ClientCard
-                      key={client.id}
-                      client={client}
-                      onDelete={() => handleDeleteClient(client.id)} // Pasamos la función de eliminar a la tarjeta
-                      onClick={() => handleClientClick(client.id)}
+                  employeesData.employees.map((employee) => (
+                    <EmployeeCard
+                      key={employee.id}
+                      employee={employee}
+                      onClick={() => handleEmployeeClick(employee.id)}
                     />
                   ))
                 )}
               </ul>
               <div className="flex justify-center items-center h-12 mt-4">
                 <PaginationComponent
-                  page={clientsData.currentPage}
-                  totalPages={clientsData.totalPages}
+                  page={employeesData.currentPage}
+                  totalPages={employeesData.totalPages}
                   onPageChange={handlePageChange}
                 />
               </div>
@@ -122,7 +111,7 @@ const Clients = () => {
           ) : (
             <div className="flex justify-center items-center flex-grow">
               <h3 className="text-white-for-text-4">
-                No se han creado clientes aún...
+                No se han registrado empleados aún...
               </h3>
             </div>
           )}
@@ -132,4 +121,4 @@ const Clients = () => {
   );
 };
 
-export default Clients;
+export default Employees;

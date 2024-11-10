@@ -8,6 +8,7 @@ module.exports = {
 		deleteUser: catchedAsync(require('./user.controllers/deleteUser')),
 		updateUser: catchedAsync(require('./user.controllers/updateUser')),
 		loginUser: catchedAsync(require('./user.controllers/loginUser')),
+		loginGoogleUser: catchedAsync(require('./user.controllers/loginGoogle')),
 	},
 	client: {
 		getAllClient: catchedAsync(require('./client.controllers/getAllClient')),

@@ -1,16 +1,26 @@
+const { employee } = require('..')
 const { models } = require('../../config/database')
 const { response } = require('../../utils')
 const { ClientError } = require('../../utils/errors')
 
 module.exports = async (req, res) => {
-	const all_employee = await models.Employee.findAll({
-		include: [{
-			model: models.Project,
-			through: 'ProjectEmployees'
-		}]
+	const page = parseInt(req.query.page) || 1
+	const limit = parseInt(req.query.limit) || 10
+	const offset = (page - 1) * limit
+
+	const { count, rows } = await models.Employee.findAndCountAll({
+		limit,
+		offset,
 	})
 
-	if(!all_employee) throw new ClientError('Ocurrio un error intentelo nuevamente.', 400)
+	if (!rows) throw new ClientError('Ocurrió un error, intentelo de nuevo.', 400)
 
-	response(res, 201, all_employee)
+	const totalPages = Math.ceil(count / limit)
+
+	response(res, 200, {
+		totalItems: count,
+		totalPages,
+		currentPage: page,
+		employees: rows,
+	})
 }
