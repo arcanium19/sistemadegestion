@@ -4,7 +4,7 @@ const { ClientError } = require('../../utils/errors')
 
 module.exports = async (req, res) => {
 	const { id } = req.params
-	const { name, email, contact } = req.body
+	const { name, email, contact, address } = req.body
 
 	const client = await models.Client.findByPk(id)
 
@@ -13,6 +13,7 @@ module.exports = async (req, res) => {
 	client.name = name || client.name
 	client.email = email || client.email
 	client.contact = contact || client.contact
+	client.address = address || client.address
 
 	const client_updated = await client.save()
 

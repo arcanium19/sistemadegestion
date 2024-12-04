@@ -1,7 +1,7 @@
 const server = require('./src/server')
 const config = require('./src/config/config')
 const { sequelize } = require('./src/config/database')
-const { generateFakeUsers, generateFakeClients, generateFakeEmployees } = require('./src/config/faker')
+const { generateFakeUsers, generateFakeClients, generateFakeEmployees, generateFakeProviders } = require('./src/config/faker')
 
 server.listen(`${config.PORT}`, async () => {
 	try {
@@ -10,6 +10,7 @@ server.listen(`${config.PORT}`, async () => {
 		console.log('Database synchronized successfully.')
 		await generateFakeUsers();
 		await generateFakeClients();
+		await generateFakeProviders();
 		await generateFakeEmployees();
 		console.log('Database info Loaded.')
 

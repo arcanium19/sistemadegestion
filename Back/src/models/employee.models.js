@@ -11,7 +11,15 @@ module.exports = (sequelize) => {
 			type: DataTypes.STRING,
 			allowNull: false
 		},
-		hourly_rate: {
+		email:{
+			type: DataTypes.STRING,
+			allowNull: true,
+		},
+		phone: {
+			type: DataTypes.STRING,
+			allowNull: true,
+		},
+		hourly_wage: {
 			type: DataTypes.DECIMAL,
 			allowNull: false
 		}

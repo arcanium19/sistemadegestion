@@ -7,7 +7,7 @@ module.exports = async (req, res) => {
 	const limit = parseInt(req.query.limit) || 10
 	const offset = (page - 1) * limit
 
-	const { count, rows } = await models.Employee.findAndCountAll({
+	const { count, rows } = await models.Provider.findAndCountAll({
 		limit,
 		offset,
 	})
@@ -20,6 +20,6 @@ module.exports = async (req, res) => {
 		totalItems: count,
 		totalPages,
 		currentPage: page,
-		employees: rows,
+		providers: rows,
 	})
 }

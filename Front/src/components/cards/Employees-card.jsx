@@ -37,21 +37,7 @@ const EmployeeCard = ({ employee, onEdit, onDelete, onViewDetails }) => {
       </div>
 
       {/* Botones de acciones */}
-      <div className="flex flex-row justify-end items-center space-x-2 mt-3 lg:mt-0">
-        {/* <Button
-          variant="outlined"
-          color="primary"
-          size="small"
-          onClick={() => onViewDetails(employee.id)}
-        >
-          Ver más
-        </Button>
-        <IconButton onClick={() => onEdit(employee.id)} sx={{ color: "white" }}>
-          <Edit />
-        </IconButton>
-        <IconButton color="error" onClick={() => onDelete(employee.id)}>
-          <Delete />
-        </IconButton> */}
+      <div className="flex lg:flex-row flex-col justify-end items-center mt-3 lg:mt-0">
 		<ButtonOption actionType="More" onClick={() => onViewDetails(employee.id)} />
 		<ButtonOption actionType="Editar" onClick={() => onEdit(employee.id)} />
 		<ButtonOption actionType="Borrar" onClick={() => onDelete(employee.id)} />

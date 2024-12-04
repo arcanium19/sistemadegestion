@@ -6,6 +6,9 @@ import Loading from "../loading/Loading";
 import PaginationComponent from "../pagination/Pagination";
 import EmployeeCard from "../cards/Employees-card";
 import ButtonOption from "../buttons/ButtonOption";
+import ModalConfirm from "../modals/ModalConfirm";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 
 const Employees = () => {
   const [employeesData, setEmployeesData] = useState({
@@ -16,12 +19,18 @@ const Employees = () => {
   });
   const [loadingInitial, setLoadingInitial] = useState(true);
   const [loadingPagination, setLoadingPagination] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [page, setPage] = useState(1);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [employeeToDelete, setEmployeeToDelete] = useState(null);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
   const router = useRouter();
 
   // Función para obtener empleados
   const fetchEmployees = async (page) => {
-    setLoadingPagination(true); // Activar loading de paginación
+    setLoadingPagination(true);
     try {
       const response = await axios.get(
         `http://${process.env.NEXT_PUBLIC_HOST}:${process.env.NEXT_PUBLIC_PORT_BACKEND}/api/employee/`,
@@ -29,41 +38,74 @@ const Employees = () => {
           params: { page, limit: 10 },
         }
       );
-      const { employees, totalItems, totalPages, currentPage } =
-        response.data.data;
+      const { employees, totalItems, totalPages, currentPage } = response.data.data;
       setEmployeesData({ employees, totalItems, totalPages, currentPage });
     } catch (error) {
       console.error("Error al obtener empleados:", error.message);
     } finally {
-      setLoadingPagination(false); // Desactivar loading de paginación
+      setLoadingPagination(false);
     }
   };
 
   // Efecto para carga inicial del componente
   useEffect(() => {
     const loadData = async () => {
-      setLoadingInitial(true); // Activar loading inicial
+      setLoadingInitial(true);
       await fetchEmployees(page);
-      setLoadingInitial(false); // Desactivar loading inicial
+      setLoadingInitial(false);
     };
     loadData();
-  }, []); // Solo en el montaje inicial
+  }, []);
 
   // Función para cambiar de página
   const handlePageChange = (event, newPage) => {
     setPage(newPage);
-    fetchEmployees(newPage); // Llamada al backend para cambiar de página
+    fetchEmployees(newPage);
   };
 
+  // Función para redirigir a los detalles de un empleado
   const handleEmployeeClick = (employeeId) => {
     router.push(`/employees/${employeeId}`);
+  };
+
+  // Abrir el modal de confirmación
+  const openConfirmModal = (employeeId) => {
+    setEmployeeToDelete(employeeId);
+    setIsModalOpen(true);
+  };
+
+  // Función para eliminar empleado
+  const handleDeleteEmployee = async () => {
+    setIsDeleting(true);
+    setIsModalOpen(false);
+
+    try {
+      const response = await axios.delete(
+        `http://${process.env.NEXT_PUBLIC_HOST}:${process.env.NEXT_PUBLIC_PORT_BACKEND}/api/employee/${employeeToDelete}`
+      );
+      // Mostrar mensaje de éxito
+      setSnackbarMessage("Empleado eliminado con éxito");
+      setSnackbarSeverity("success");
+    } catch (error) {
+      // Mostrar mensaje de error
+      setSnackbarMessage(error?.response?.data?.message || "Hubo un error");
+      setSnackbarSeverity("error");
+    } finally {
+      setIsDeleting(false);
+      setSnackbarOpen(true); // Mostrar el Snackbar
+      fetchEmployees(page); // Actualizar la lista de empleados
+    }
+  };
+
+  // Función para cerrar el snackbar
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false);
   };
 
   // Renderizado del componente
   return (
     <div className="min-h-screen lg:min-h-full flex flex-col bg-dark-light shadow-md rounded-md p-4">
       {loadingInitial ? (
-        // Contenedor centrado en pantalla para el primer loading
         <div
           style={{
             display: "flex",
@@ -86,7 +128,6 @@ const Employees = () => {
           </div>
           {employeesData.totalItems > 0 ? (
             <>
-              {/* Mostrar loading de paginación en el área de empleados */}
               <ul className="flex-grow overflow-y-auto">
                 {loadingPagination ? (
                   <Loading />
@@ -96,6 +137,8 @@ const Employees = () => {
                       key={employee.id}
                       employee={employee}
                       onClick={() => handleEmployeeClick(employee.id)}
+                      onDelete={() => openConfirmModal(employee.id)}
+                      isDeleting={isDeleting && employeeToDelete === employee.id}
                     />
                   ))
                 )}
@@ -117,6 +160,27 @@ const Employees = () => {
           )}
         </div>
       )}
+
+      {/* Modal de confirmación de eliminación */}
+      <ModalConfirm
+        isOpen={isModalOpen}
+        message="¿Seguro que desea eliminar este empleado?"
+        onClose={() => setIsModalOpen(false)}
+        onAccept={handleDeleteEmployee}
+      />
+
+      {/* Snackbar de Material UI para mostrar alertas */}
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={10000} // Se cierra automáticamente después de 10 segundos
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+        sx={{ marginX: 2, marginBottom: 2 }}
+      >
+        <Alert onClose={handleCloseSnackbar} severity={snackbarSeverity} sx={{ width: "100%" }}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };

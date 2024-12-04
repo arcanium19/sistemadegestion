@@ -29,7 +29,7 @@ const Statistics = () => {
         colorClass="white-for-text-4"
         widthClass="w-full md:w-1/2 lg:w-1/4"
       />
-      <div className="flex lg:flex-row flex-col items-center space-x-2 mt-3 lg:mt-0 justify-between">
+      <div className="flex lg:flex-row flex-col items-center mt-3 lg:mt-0">
         <ButtonOption
           actionType="Aceptar"
           onClick={() => console.log("Aceptar")}

@@ -31,6 +31,13 @@ module.exports = {
 		deleteProject: catchedAsync(require('./project.controllers/deleteProject')),
 		updateProject: catchedAsync(require('./project.controllers/updateProject')),
 	},
+	provider: {
+		getAllProvider: catchedAsync(require('./provider.controllers/getAllProvider')),
+		getProviderById: catchedAsync(require('./provider.controllers/getProviderById')),
+		createProvider: catchedAsync(require('./provider.controllers/createProvider')),
+		deleteProvider: catchedAsync(require('./provider.controllers/deleteProvider')),
+		updateProvider: catchedAsync(require('./provider.controllers/updateProvider')),
+	},
 	tool: {
 		getAllTool: catchedAsync(require('./tool.controllers/getAllTools')),
 		getToolById: catchedAsync(require('./tool.controllers/getToolById')),

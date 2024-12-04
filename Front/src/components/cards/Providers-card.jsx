@@ -1,11 +1,11 @@
 import React from "react";
-import { Person, Phone, Email } from "@mui/icons-material";
+import { Business, Phone, Email } from "@mui/icons-material";
 import ButtonOption from "../buttons/ButtonOption";
 
-const ClientCard = ({ client, onEdit, onDelete, isDeleting }) => {
+const ProviderCard = ({ provider, onEdit, onDelete, isDeleting }) => {
   return (
     <div
-      id={client.id}
+      id={provider.id}
       className="
         flex flex-col lg:flex-row justify-between items-center
         bg-dark-light p-2 mt-2 mb-2 rounded-lg text-white-for-text-1
@@ -21,30 +21,30 @@ const ClientCard = ({ client, onEdit, onDelete, isDeleting }) => {
       }}
     >
       <div className="flex items-center flex-grow text-left lg:min-w-[250px] lg:max-w-[250px]">
-        <Person sx={{ color: "white", fontSize: 20, marginRight: 1 }} />
-        <p className="font-semibold">{client.name}</p>
+        <Business sx={{ color: "white", fontSize: 20, marginRight: 1 }} />
+        <p className="font-semibold">{provider.name}</p>
       </div>
 
       <div className="flex items-center flex-grow text-left lg:min-w-[250px] lg:max-w-[250px]">
         <Email sx={{ color: "white", fontSize: 20, marginRight: 1 }} />
-        <p>{client.email}</p>
+        <p>{provider.email}</p>
       </div>
 
       <div className="flex items-center flex-grow text-left lg:min-w-[200px] lg:max-w-[200px]">
         <Phone sx={{ color: "white", fontSize: 20, marginRight: 1 }} />
-        <p>{client.contact}</p>
+        <p>{provider.contact}</p>
       </div>
 
       <div className="flex flex-row justify-end items-center mt-3 lg:mt-0">
-        <ButtonOption actionType="Editar" onClick={() => onEdit(client.id)} />
+        <ButtonOption actionType="Editar" onClick={() => onEdit(provider.id)} />
         <ButtonOption
           actionType="Borrar"
           isLoading={isDeleting}
-          onClick={() => onDelete(client.id)}
+          onClick={() => onDelete(provider.id)}
         />
       </div>
     </div>
   );
 };
 
-export default ClientCard;
+export default ProviderCard;

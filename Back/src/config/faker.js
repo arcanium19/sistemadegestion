@@ -2,6 +2,7 @@
 const { catchedAsync } = require('../utils')
 const createUser = catchedAsync(require('../controllers/user.controllers/createUser')); // Asegúrate de ajustar la ruta
 const createClient = catchedAsync(require('../controllers/client.controllers/createClient')); // Asegúrate de ajustar la ruta
+const createProvider = catchedAsync(require('../controllers/provider.controllers/createProvider'));
 const createEmployee = catchedAsync(require('../controllers/employee.controllers/createEmployee')); // Asegúrate de ajustar la ruta
 
 
@@ -45,9 +46,9 @@ const generateFakeClients = async (count = 23) => {
             name: faker.person.firstName() + ' ' + faker.person.lastName(),
             contact: faker.phone.number(),
             email: faker.internet.email(),
-            new_service_request: faker.lorem.sentence(),
+			address: faker.location.streetAddress(),
         };
-
+	
         // Crear un nuevo objeto de solicitud para pasar al controlador
         const req = {
             body: fakeClient,
@@ -71,11 +72,43 @@ const generateFakeClients = async (count = 23) => {
     console.log(`${count} fake clients generated and created.`);
 };
 
+const generateFakeProviders = async (count = 23) => {
+    for (let i = 0; i < count; i++) {
+        const fakeClient = {
+            name: faker.company.name(),
+            contact: faker.phone.number(),
+            email: faker.internet.email(),
+			address: faker.location.streetAddress(),
+        };
+	
+        // Crear un nuevo objeto de solicitud para pasar al controlador
+        const req = {
+            body: fakeClient,
+        };
+
+        // Crear un objeto de respuesta simulado
+        const res = {
+            status: (statusCode) => {
+                return {
+                    json: (data) => {
+                        console.log(`Status: ${statusCode}`, data);
+                    },
+                };
+            },
+        };
+
+        // Llama al controlador para crear el cliente
+        await createProvider(req, res);
+    }
+
+    console.log(`${count} fake clients generated and created.`);
+};
+
 const generateFakeEmployees = async (count = 23) => {
     for (let i = 0; i < count; i++) {
         const fakeEmployee = {
             name: faker.person.firstName() + ' ' + faker.person.lastName(),
-            hourly_rate: Math.floor(Math.random() * 25), // Genera un número entero entre 0 y 24
+			hourly_wage: Math.floor(Math.random() * (1400 - 1000 + 1)) + 1000,
         };
 
         // Crear un nuevo objeto de solicitud para pasar al controlador
@@ -105,4 +138,5 @@ module.exports = {
     generateFakeUsers,
 	generateFakeClients,
 	generateFakeEmployees,
+	generateFakeProviders,
 };

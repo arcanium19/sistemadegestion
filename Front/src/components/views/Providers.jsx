@@ -4,16 +4,16 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import Loading from "../loading/Loading";
 import PaginationComponent from "../pagination/Pagination";
-import ClientCard from "../cards/Clients-card";
+import ProviderCard from "../cards/Providers-card";
 import ButtonOption from "../buttons/ButtonOption";
 import ModalConfirm from "../modals/ModalConfirm";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import Stack from "@mui/material/Stack";
 
-const Clients = () => {
-  const [clientsData, setClientsData] = useState({
-    clients: [],
+const Providers = () => {
+  const [providersData, setProvidersData] = useState({
+    providers: [],
     totalItems: 0,
     totalPages: 0,
     currentPage: 1,
@@ -23,27 +23,27 @@ const Clients = () => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [page, setPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [clientToDelete, setClientToDelete] = useState(null);
-  const [snackbarOpen, setSnackbarOpen] = useState(false); // Estado de visibilidad del Snackbar
-  const [snackbarMessage, setSnackbarMessage] = useState(""); // Mensaje de la alerta
-  const [snackbarSeverity, setSnackbarSeverity] = useState("success"); // Severidad de la alerta (success, error, etc.)
+  const [providerToDelete, setProviderToDelete] = useState(null);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
   const router = useRouter();
 
-  // Función para obtener clientes
-  const fetchClients = async (page) => {
+  // Función para obtener proveedores
+  const fetchProviders = async (page) => {
     setLoadingPagination(true);
     try {
       const response = await axios.get(
-        `http://${process.env.NEXT_PUBLIC_HOST}:${process.env.NEXT_PUBLIC_PORT_BACKEND}/api/client/`,
+        `http://${process.env.NEXT_PUBLIC_HOST}:${process.env.NEXT_PUBLIC_PORT_BACKEND}/api/provider/`,
         {
           params: { page, limit: 10 },
         }
       );
-      const { clients, totalItems, totalPages, currentPage } =
+      const { providers, totalItems, totalPages, currentPage } =
         response.data.data;
-      setClientsData({ clients, totalItems, totalPages, currentPage });
+      setProvidersData({ providers, totalItems, totalPages, currentPage });
     } catch (error) {
-      console.error("Error al obtener clientes:", error.message);
+      console.error("Error al obtener proveedores:", error.message);
     } finally {
       setLoadingPagination(false);
     }
@@ -53,7 +53,7 @@ const Clients = () => {
   useEffect(() => {
     const loadData = async () => {
       setLoadingInitial(true);
-      await fetchClients(page);
+      await fetchProviders(page);
       setLoadingInitial(false);
     };
     loadData();
@@ -62,26 +62,26 @@ const Clients = () => {
   // Función para cambiar de página
   const handlePageChange = (event, newPage) => {
     setPage(newPage);
-    fetchClients(newPage);
+    fetchProviders(newPage);
   };
 
   // Abrir el modal de confirmación
-  const openConfirmModal = (clientId) => {
-    setClientToDelete(clientId);
+  const openConfirmModal = (providerId) => {
+    setProviderToDelete(providerId);
     setIsModalOpen(true);
   };
 
-  // Función para eliminar cliente
-  const handleDeleteClient = async () => {
+  // Función para eliminar proveedor
+  const handleDeleteProvider = async () => {
     setIsDeleting(true);
     setIsModalOpen(false);
 
     try {
       const response = await axios.delete(
-        `http://${process.env.NEXT_PUBLIC_HOST}:${process.env.NEXT_PUBLIC_PORT_BACKEND}/api/client/${clientToDelete}`
+        `http://${process.env.NEXT_PUBLIC_HOST}:${process.env.NEXT_PUBLIC_PORT_BACKEND}/api/provider/${providerToDelete}`
       );
       // Mostrar mensaje de éxito
-      setSnackbarMessage("Cliente eliminado con éxito");
+      setSnackbarMessage("Proveedor eliminado con éxito");
       setSnackbarSeverity("success");
     } catch (error) {
       // Mostrar mensaje de error
@@ -90,7 +90,7 @@ const Clients = () => {
     } finally {
       setIsDeleting(false);
       setSnackbarOpen(true); // Mostrar el Snackbar
-      fetchClients(page); // Actualizar la lista de clientes
+      fetchProviders(page); // Actualizar la lista de proveedores
     }
   };
 
@@ -116,34 +116,34 @@ const Clients = () => {
       ) : (
         <div className="flex flex-col flex-grow">
           <div className="flex flex-col -left-full my-3">
-            <h1 className="text-3xl text-center py-4">CLIENTES</h1>
+            <h1 className="text-3xl text-center py-4">PROVEEDORES</h1>
             <ButtonOption
               actionType="New"
-              additionalText="NUEVO Cliente"
-              onClick={() => console.log("Nuevo cliente")}
+              additionalText="NUEVO Proveedor"
+              onClick={() => console.log("Nuevo proveedor")}
             />
           </div>
-          {clientsData.totalItems > 0 ? (
+          {providersData.totalItems > 0 ? (
             <>
               <ul className="flex-grow overflow-y-auto">
                 {loadingPagination ? (
                   <Loading />
                 ) : (
-                  clientsData.clients.map((client) => (
-                    <ClientCard
-                      key={client.id}
-                      client={client}
-                      onDelete={() => openConfirmModal(client.id)}
-                      onClick={() => handleClientClick(client.id)}
-                      isDeleting={isDeleting && clientToDelete === client.id}
+                  providersData.providers.map((provider) => (
+                    <ProviderCard
+                      key={provider.id}
+                      provider={provider}
+                      onDelete={() => openConfirmModal(provider.id)}
+                      onClick={() => handleProviderClick(provider.id)}
+                      isDeleting={isDeleting && providerToDelete === provider.id}
                     />
                   ))
                 )}
               </ul>
               <div className="flex justify-center items-center h-12 mt-4">
                 <PaginationComponent
-                  page={clientsData.currentPage}
-                  totalPages={clientsData.totalPages}
+                  page={providersData.currentPage}
+                  totalPages={providersData.totalPages}
                   onPageChange={handlePageChange}
                 />
               </div>
@@ -151,7 +151,7 @@ const Clients = () => {
           ) : (
             <div className="flex justify-center items-center flex-grow">
               <h3 className="text-white-for-text-4">
-                No se han creado clientes aún...
+                No se han creado proveedores aún...
               </h3>
             </div>
           )}
@@ -161,15 +161,15 @@ const Clients = () => {
       {/* Modal de confirmación de eliminación */}
       <ModalConfirm
         isOpen={isModalOpen}
-        message="¿Seguro que desea eliminar este cliente?"
+        message="¿Seguro que desea eliminar este proveedor?"
         onClose={() => setIsModalOpen(false)}
-        onAccept={handleDeleteClient}
+        onAccept={handleDeleteProvider}
       />
 
       {/* Snackbar de Material UI para mostrar alertas */}
       <Snackbar
         open={snackbarOpen}
-        autoHideDuration={10000} // Se cierra automáticamente después de 10 segundos
+        autoHideDuration={10000}
         onClose={handleCloseSnackbar}
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
         sx={{ marginX: 2, marginBottom: 2 }}
@@ -182,4 +182,4 @@ const Clients = () => {
   );
 };
 
-export default Clients;
+export default Providers;

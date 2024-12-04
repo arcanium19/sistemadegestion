@@ -5,9 +5,9 @@ const { ClientError } = require('../../utils/errors')
 module.exports = async (req, res) => {
 	const { id } = req.params
 
-	const client = await models.Client.findByPk(id)
+	const provider = await models.Provider.findByPk(id)
 
-	if(!client) throw new ClientError('No se encontró el cliente.', 404)
+	if(!provider) throw new ClientError('No se encontró el proveedor.', 404)
 
-	response(res, 200, client)
+	response(res, 200, provider)
 }

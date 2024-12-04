@@ -1,7 +1,7 @@
 import React from "react";
 import ButtonOption from "../buttons/ButtonOption";
 
-const ModalData = ({ isOpen, onClose, message, onAccept }) => {
+const ModalConfirm = ({ isOpen, onClose, message, onAccept }) => {
   if (!isOpen) return null;
 
   return (
@@ -25,4 +25,4 @@ const ModalData = ({ isOpen, onClose, message, onAccept }) => {
   );
 };
 
-export default ModalData;
+export default ModalConfirm;

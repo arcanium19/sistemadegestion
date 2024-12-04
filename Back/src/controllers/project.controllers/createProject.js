@@ -5,9 +5,9 @@ const { ClientError } = require('../../utils/errors')
 module.exports = async (req, res) => {
 	let transaction = await sequelize.transaction()
 
-	const { client_id, estimated_price, final_price, employees, tools } = req.body
+	const { name, description, start_date, end_date, client_id, estimated_price, current_state } = req.body
 
-	if(!client_id || !estimated_price || !employees || !tools) throw new ClientError('Debe completar todos los campos obligatorios', 400)
+	if (!client_id || !estimated_price || !employees || !name || !description || !start_date || !end_date || !current_state) throw new ClientError('Debe completar todos los campos obligatorios', 400)
 
 	if (employees !== undefined && Array.isArray(employees) && employees.length > 0) {
 		const employeesExist = await models.Employee.findAll({
