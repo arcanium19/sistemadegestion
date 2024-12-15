@@ -19,6 +19,8 @@ const Tool = require('../models/tool.models')(sequelize)
 const User = require('../models/user.models')(sequelize)
 const WeeklyEmployeeRecord = require('../models/WeeklyEmployeeRecord.models')(sequelize)
 const WorkDay = require('../models/workday.models')(sequelize)
+const Budget = require('../models/budget.models')(sequelize)
+const Material = require('../models/materials.models')(sequelize)
 
 Client.hasMany(Project, { foreignKey: 'client_id' })
 Project.belongsTo(Client, { foreignKey: 'client_id' })
@@ -48,15 +50,25 @@ WeeklyEmployeeRecord.belongsTo(Project, { foreignKey: 'project_id' });
 Employee.hasMany(WeeklyEmployeeRecord, { foreignKey: 'employee_id' });
 WeeklyEmployeeRecord.belongsTo(Employee, { foreignKey: 'employee_id' });
 
+Budget.hasMany(Material, { foreignKey: 'budget_id', as: 'materials' });
+Material.belongsTo(Budget, { foreignKey: 'budget_id', as: 'budget' });
+
+Budget.belongsTo(Client, { foreignKey: 'client_id', as: 'client' });
+Client.hasMany(Budget, { foreignKey: 'client_id', as: 'budgets' });
+
+
+
 module.exports = {
 	sequelize,
 	models: {
+		Budget,
 		User,
 		Client,
 		Employee,
 		Estimate,
 		ExtraExpense,
 		MaterialStock,
+		Material,
 		Payment,
 		Project,
 		Provider,

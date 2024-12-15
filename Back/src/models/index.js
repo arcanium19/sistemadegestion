@@ -1,4 +1,5 @@
 module.exports = {
+	Budget: require('./budget.models'),
 	Client: require('./client.models'),
 	Employee: require('./employee.models'),
 	Estimate: require('./estimate.models'),

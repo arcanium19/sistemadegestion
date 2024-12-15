@@ -9,7 +9,6 @@ import ButtonOption from "../buttons/ButtonOption";
 import ModalConfirm from "../modals/ModalConfirm";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
-import Stack from "@mui/material/Stack";
 
 const Clients = () => {
   const [clientsData, setClientsData] = useState({

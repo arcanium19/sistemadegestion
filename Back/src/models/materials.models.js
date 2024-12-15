@@ -7,11 +7,11 @@ module.exports = (sequelize) => {
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4,
     },
-    project_id: {
+    budget_id: {
       type: DataTypes.UUID,
-      allowNull: false,
+      allowNull: true,
       references: {
-        model: 'Projects',
+        model: 'Budgets',
         key: 'id',
       },
     },
@@ -38,15 +38,19 @@ module.exports = (sequelize) => {
     observations: {
       type: DataTypes.TEXT,
       allowNull: true,
-    }
+    },
+	total: {
+		type: DataTypes.FLOAT,
+		allowNull: false
+	}
   });
 
-  Material.associate = (models) => {
-    Material.belongsTo(models.Project, {
-      foreignKey: 'project_id',
-      as: 'project',
-    });
-  };
+//   Material.associate = (models) => {
+//     Material.belongsTo(models.Project, {
+//       foreignKey: 'budget_id',
+//       as: 'project',
+//     });
+//   };
 
   return Material;
 };

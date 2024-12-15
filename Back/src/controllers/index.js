@@ -1,4 +1,5 @@
 const { catchedAsync } = require('../utils')
+const getBudgetById = require('./budget.controllers/getBudgetById')
 
 module.exports = {
 	user: {
@@ -16,6 +17,7 @@ module.exports = {
 		createClient: catchedAsync(require('./client.controllers/createClient')),
 		deleteClient: catchedAsync(require('./client.controllers/deleteClient')),
 		updateClient: catchedAsync(require('./client.controllers/updateClient')),
+		getClientSelector: catchedAsync(require('./client.controllers/getClientSelector'))
 	},
 	employee: {
 		getAllEmployee: catchedAsync(require('./employee.controllers/getAllEmployee')),
@@ -54,4 +56,9 @@ module.exports = {
 		deleteStock: catchedAsync(require('./materialStock.controllers/deleteStock')),
 		updateStock: catchedAsync(require('./materialStock.controllers/updateStock')),
 	},
+	budget: {
+		createBudget: catchedAsync(require('./budget.controllers/createBudget')),
+		deleteBudget: catchedAsync(require('./budget.controllers/deleteBudget')),
+		getBudgetById: catchedAsync(require('./budget.controllers/getBudgetById')),
+	}
 }

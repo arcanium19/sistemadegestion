@@ -6,6 +6,7 @@ const project_routes = require('./project.routes')
 const tool_routes = require('./tool.routes')
 const user_routes = require('./user.routes')
 const provider_routes = require('./provider.routes')
+const budget_routes = require('./budget.routes')
 const main_routes = Router()
 
 main_routes.get('/', (req, res) => {
@@ -19,5 +20,6 @@ main_routes.use('/provider', provider_routes)
 main_routes.use('/stock', material_stock_routes)
 main_routes.use('/tool', tool_routes)
 main_routes.use('/user', user_routes)
+main_routes.use('/budget', budget_routes)
 
 module.exports = main_routes

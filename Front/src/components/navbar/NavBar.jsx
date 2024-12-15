@@ -9,7 +9,8 @@ import Inventory2Icon from "@mui/icons-material/Inventory2";
 import HistoryIcon from "@mui/icons-material/History";
 import SettingsIcon from "@mui/icons-material/Settings";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
-import DataSaverOnIcon from '@mui/icons-material/DataSaverOn';
+import DataSaverOnIcon from "@mui/icons-material/DataSaverOn";
+import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import { useDispatch } from "react-redux";
 import { logout } from "@/redux/actions";
 
@@ -106,6 +107,19 @@ const NavBar = () => {
               >
                 <WorkIcon className="mr-2" />
                 Empleados
+              </button>
+            </li>
+            <li className="flex items-center mb-2">
+              <button
+                className={`w-full text-left p-2 rounded-md ${
+                  isActive("/dashboard/budgets")
+                    ? "bg-gray-800 text-blue-200"
+                    : "hover:bg-gray-700"
+                }`}
+                onClick={() => handleNavigation("/dashboard/budgets")}
+              >
+                <MonetizationOnIcon className="mr-2" />
+                Presupuestos
               </button>
             </li>
             <li className="flex items-center mb-2">

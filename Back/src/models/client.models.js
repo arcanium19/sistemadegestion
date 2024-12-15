@@ -21,12 +21,12 @@ module.exports = (sequelize) => {
     }
   });
 
-  Client.associate = (models) => {
-    Client.hasMany(models.Budget, {
-      foreignKey: 'client_id',
-      as: 'budgets',
-    });
-  };
+//   Client.associate = (models) => {
+//     Client.hasMany(models.Budget, {
+//       foreignKey: 'client_id',
+//       as: 'budgets',
+//     });
+//   };
 
   return Client;
 };
