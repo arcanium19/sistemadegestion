@@ -11,11 +11,9 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import DataSaverOnIcon from "@mui/icons-material/DataSaverOn";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
-import { useDispatch } from "react-redux";
-import { logout } from "@/redux/actions";
+import Cookies from "js-cookie";
 
 const NavBar = () => {
-  const dispatch = useDispatch();
   const router = useRouter();
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -28,6 +26,11 @@ const NavBar = () => {
     setIsMenuOpen(false);
     router.push(path);
   };
+
+  const handleLogout = () => {
+	Cookies.remove("token", { path: "/" })
+	router.push("/");
+  }
 
   return (
     <div className="relative w-full lg:w-[300px]">
@@ -165,10 +168,7 @@ const NavBar = () => {
             <li className="flex items-center mb-2">
               <button
                 className="w-full text-left p-2 hover:bg-gray-700 rounded-md"
-                onClick={() => {
-                  dispatch(logout());
-                  router.push("/");
-                }}
+                onClick={handleLogout}
               >
                 <ExitToAppIcon className="mr-2" />
                 Cerrar sesión

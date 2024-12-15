@@ -1,103 +1,161 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import ReportIcon from "@mui/icons-material/Report";
+import {
+  TextField,
+  Button,
+  Snackbar,
+  Alert,
+  Stack,
+  MenuItem,
+  Select,
+  InputLabel,
+  FormControl,
+  Divider,
+  InputAdornment,
+} from "@mui/material";
+import Cookies from "js-cookie";
+import CookieBanner from "@/components/modals/CookieBanner";
 
 export default function Home() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(null);
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      setIsAuthenticated(true);
-      router.push("/dashboard");
-    }
-  }, [router, isAuthenticated]);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setErrorMessage(null); // Limpiar cualquier mensaje de error previo
+	e.preventDefault();
+  
+	try {
+	  const response = await axios.post(
+		`http://${process.env.NEXT_PUBLIC_HOST}:${process.env.NEXT_PUBLIC_PORT_BACKEND}/api/user/login`,
+		{
+		  email,
+		  password,
+		}
+	  );
+  
+	  const { token } = response.data;
+  
+	  Cookies.set("token", token, { expires: 7, sameSite: "strict" });
+	  router.push("/dashboard"); 
+	} catch (error) {
+	  setSnackbarMessage(
+		error.response?.data?.message || "Error al iniciar sesión"
+	  );
+	  setSnackbarSeverity("error");
+	  setSnackbarOpen(true);
+	}
+  };
 
-    try {
-      const response = await axios.post(
-        `http://${process.env.NEXT_PUBLIC_HOST}:${process.env.NEXT_PUBLIC_PORT_BACKEND}/api/user/login`,
-        {
-          email,
-          password,
-        }
-      );
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false);
+  };
 
-      const { token } = response.data; // Suponiendo que el token se encuentra en `data.token`
-      localStorage.setItem("token", token); // Guardamos el token en el almacenamiento local
-      setIsAuthenticated(true);
-      router.push("/dashboard"); // Redirige a la ruta deseada
-    } catch (error) {
-      setErrorMessage(
-        error.response?.data?.message || "Error en la autenticación"
-      );
-    }
+  const handleRegister = () => {
+		router.push("/new-admin/register/super-admin");
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-dark to-dark-gray">
-      <div className="w-full max-w-md p-8 space-y-6 bg-white shadow-lg shadow-black rounded-xl">
-        <h2 className="text-2xl font-bold text-center text-blue-600">Login</h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Email
-            </label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              required
-              className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-gray-900"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-          <div>
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Password
-            </label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              required
-              className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-gray-900"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
-          {errorMessage && (
-            <div className="flex flex-row">
-              <ReportIcon className="text-red-600 text-sm align-middle text-center" />
-              <p className="text-red-500 text-sm font-bold align-middle text-center">
-                {errorMessage}
-              </p>
-            </div>
-          )}
-          <button
-            type="submit"
-            className="w-full px-4 py-2 font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-          >
-            Login
-          </button>
-        </form>
+    <div className="flex h-screen">
+      <div
+        className="hidden lg:block w-4/5 h-full bg-cover bg-center"
+        style={{ backgroundImage: 'url("/landingBg.webp")' }}
+      >
+        {/* If you want to use a gradient instead of an image: */}
+        {/* <div className="w-3/5 h-full bg-gradient-to-br from-purple-700 to-pink-500"></div> */}
       </div>
+
+      {/* Right Side: Login Form */}
+      <div className="w-full lg:w-1/5 lg:min-w-[500px] flex items-center justify-center bg-white px-8">
+        <div className="max-w-sm w-full">
+          <h2 className="text-3xl font-bold text-[#3B82F6] text-center mb-6">
+            Hola, <span className="text-black">Bienvenido!</span>
+          </h2>
+
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+              <label
+                htmlFor="email"
+                className="block text-gray-600 mb-1 font-bold"
+              >
+                Email
+              </label>
+              <input
+                type="email"
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#3B82F6] outline-none text-electric-sky-100 font-semibold"
+                required
+                placeholder="ejemplo@ejemplo.com..."
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="password"
+                className="block text-gray-600 font-bold mb-1"
+              >
+                Contraseña
+              </label>
+              <input
+                type="password"
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#3B82F6] outline-none text-electric-sky-100 font-semibold"
+                required
+              />
+            </div>
+
+            {/* Buttons */}
+            <div className="flex flex-col space-y-4">
+              <button
+                type="submit"
+                className="w-full bg-[#3B82F6] text-white py-2 rounded-lg font-medium hover:bg-[#2563EB] transition"
+              >
+                Ingresar
+              </button>
+              <button
+                type="button"
+                className="w-full border-2 border-[#3B82F6] text-[#3B82F6] py-2 rounded-lg font-medium hover:bg-[#3B82F6] hover:text-white transition"
+				onClick={handleRegister}
+			  >
+                Sign up
+              </button>
+            </div>
+          </form>
+
+          {/* Footer
+          <div className="mt-8 text-center text-gray-500 text-sm">
+            Follow us:
+            <div className="flex justify-center mt-2 space-x-4">
+              <a href="#" className="hover:text-[#3B82F6]">Facebook</a>
+              <a href="#" className="hover:text-[#3B82F6]">Twitter</a>
+              <a href="#" className="hover:text-[#3B82F6]">Instagram</a>
+            </div>
+          </div> */}
+          <Snackbar
+            open={snackbarOpen}
+            autoHideDuration={10000} // Se cierra automáticamente después de 10 segundos
+            onClose={handleCloseSnackbar}
+            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+            sx={{ marginX: 2, marginBottom: 2 }}
+          >
+            <Alert
+              onClose={handleCloseSnackbar}
+              severity={snackbarSeverity}
+              sx={{ width: "100%" }}
+            >
+              {snackbarMessage}
+            </Alert>
+          </Snackbar>
+        </div>
+      </div>
+	  <CookieBanner />
     </div>
   );
 }

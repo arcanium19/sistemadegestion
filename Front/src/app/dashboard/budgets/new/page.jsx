@@ -76,30 +76,49 @@ const CreateBudget = () => {
   };
 
   const handleMaterialChange = (index, e) => {
-	const { name, value } = e.target;
-	
-	// Convertir los valores a números si es necesario
-	const newValue = name === "quantity" || name === "unit_price"
-	  ? value === "" ? "" : Number(value)  // Si el campo está vacío, lo dejamos vacío, de lo contrario, lo convertimos a número
-	  : value;
-  
-	const updatedMaterials = [...materials];
-	updatedMaterials[index][name] = newValue;
-  
-	// Si los campos quantity o unit_price cambian, recalcular el total
-	if (name === "quantity" || name === "unit_price") {
-	  const quantity = updatedMaterials[index].quantity || 0;  // Asegurarse de que quantity es un número
-	  const unit_price = updatedMaterials[index].unit_price || 0;  // Asegurarse de que unit_price es un número
-	  updatedMaterials[index].total = quantity * unit_price;
-	}
-  
-	setMaterials(updatedMaterials);
+    const { name, value } = e.target;
+
+    // Convertir los valores a números si es necesario
+    const newValue =
+      name === "quantity" || name === "unit_price"
+        ? value === ""
+          ? ""
+          : Number(value) // Si el campo está vacío, lo dejamos vacío, de lo contrario, lo convertimos a número
+        : value;
+
+    const updatedMaterials = [...materials];
+    updatedMaterials[index][name] = newValue;
+
+    // Si los campos quantity o unit_price cambian, recalcular el total
+    if (name === "quantity" || name === "unit_price") {
+      const quantity = updatedMaterials[index].quantity || 0; // Asegurarse de que quantity es un número
+      const unit_price = updatedMaterials[index].unit_price || 0; // Asegurarse de que unit_price es un número
+      updatedMaterials[index].total = quantity * unit_price;
+    }
+
+    setMaterials(updatedMaterials);
   };
-  
 
   const handleRemoveMaterial = (index) => {
     const updatedMaterials = materials.filter((_, i) => i !== index);
     setMaterials(updatedMaterials);
+  };
+
+  const handleDisabledForm = () => {
+    const isFormDataInvalid =
+      !formData.name.trim() || !formData.client_id.trim();
+
+    const isMaterialsInvalid = materials.some((material) => {
+      return (
+        !material.name.trim() ||
+        !material.provider.trim() ||
+        material.unit_price <= 0 ||
+        material.quantity <= 0 ||
+        material.total <= 0
+      );
+    });
+
+    return isFormDataInvalid || isMaterialsInvalid;
   };
 
   const handleSubmit = async (e) => {
@@ -215,7 +234,7 @@ const CreateBudget = () => {
               value={formData.location}
               onChange={handleInputChange}
               fullWidth
-              required
+              //   required
               InputProps={{
                 style: { color: "white" },
               }}
@@ -242,7 +261,7 @@ const CreateBudget = () => {
               value={formData.work_type}
               onChange={handleInputChange}
               fullWidth
-              required
+              //   requkired
               InputProps={{
                 style: { color: "white" },
               }}
@@ -269,7 +288,7 @@ const CreateBudget = () => {
               value={formData.objective}
               onChange={handleInputChange}
               fullWidth
-              required
+              //   required
               InputProps={{
                 style: { color: "white" },
               }}
@@ -296,7 +315,7 @@ const CreateBudget = () => {
               value={formData.finish_details}
               onChange={handleInputChange}
               fullWidth
-              required
+              //   required
               InputProps={{
                 style: { color: "white" },
               }}
@@ -323,7 +342,7 @@ const CreateBudget = () => {
               value={formData.observations}
               onChange={handleInputChange}
               fullWidth
-              required
+              //   required
               InputProps={{
                 style: { color: "white" },
               }}
@@ -350,7 +369,7 @@ const CreateBudget = () => {
               value={formData.accessories}
               onChange={handleInputChange}
               fullWidth
-              required
+              //   required
               InputProps={{
                 style: { color: "white" },
               }}
@@ -377,7 +396,7 @@ const CreateBudget = () => {
               value={formData.extra_details}
               onChange={handleInputChange}
               fullWidth
-              required
+              //   required
               InputProps={{
                 style: { color: "white" },
               }}
@@ -473,7 +492,7 @@ const CreateBudget = () => {
                     label="Tipo Unidad"
                     value={material.unit}
                     onChange={(e) => handleMaterialChange(index, e)}
-                    required
+                    // required
                     placeholder="Kg, Cm, Lata..."
                     InputProps={{
                       style: { color: "white" },
@@ -615,6 +634,7 @@ const CreateBudget = () => {
                     key={`${index}-total`}
                     name="total"
                     label="Total"
+                    required
                     value={material.total}
                     InputProps={{
                       readOnly: true,
@@ -674,23 +694,70 @@ const CreateBudget = () => {
                 />
               </div>
             ))}
-            {/* <button
-              id="button-add-material"
-              className="w-auto px-4 py-2 border border-electric-sky-100 text-electric-sky-100 bg-transparent rounded-md text-sm font-medium transition-all duration-300 ease-in-out hover:bg-electric-sky-100 hover:text-white"
-              onClick={handleAddMaterial}
-            >
-              AGREGAR MATERIAL
-            </button> */}
 
             <Button
               onClick={handleAddMaterial}
-              className="w-auto px-4 py-2 border border-electric-sky-100 text-electric-sky-100 bg-transparent rounded-md text-sm font-medium transition-all duration-300 ease-in-out hover:bg-electric-sky-100 hover:text-white"
+              sx={{
+                width: "auto",
+                px: 4,
+                py: 2,
+                border: "1px solid",
+                borderColor: "#1e8bf8",
+                color: "#1e8bf8",
+                backgroundColor: "transparent",
+                borderRadius: "0.375rem",
+                fontSize: "0.875rem",
+                fontWeight: 500,
+                transition: "all 0.3s ease-in-out",
+                "&:hover": {
+                  backgroundColor: "#1e8bf8",
+                  color: "white",
+                },
+              }}
             >
               Agregar Material
             </Button>
           </div>
-          <Button type="submit" variant="contained" color="primary" fullWidth>
+          {/* <Button type="submit" variant="contained" color="primary" fullWidth>
             Crear Presupuesto
+          </Button> */}
+          <Button
+            type="submit"
+            variant="contained"
+            fullWidth
+            disabled={handleDisabledForm()} // Lógica de desactivado
+            sx={{
+              width: "100%",
+              mt: 4,
+              px: 4,
+              py: 2,
+              border: "1px solid",
+              borderColor: handleDisabledForm() ? "#d1d5db" : "#1e8bf8", // Borde gris si desactivado, azul si habilitado
+              backgroundColor: handleDisabledForm() ? "transparent" : "#1e8bf8", // Fondo transparente si desactivado, azul si habilitado
+              color: handleDisabledForm() ? "#d1d5db" : "#ffffff", // Color de texto gris si desactivado, blanco si habilitado
+              borderRadius: "0 0 0.5rem 0.5rem",
+              fontSize: "0.875rem",
+              fontWeight: 500,
+              transition: "all 0.3s ease-in-out", // Transición de efectos
+              "&:hover": {
+                backgroundColor: handleDisabledForm()
+                  ? "transparent"
+                  : "#1e8bf8", // Sin efecto de hover si está desactivado
+                color: handleDisabledForm() ? "#d1d5db" : "#ffffff", // Sin cambio de color si está desactivado
+              },
+              // Estilos específicos para el estado deshabilitado
+              "&.Mui-disabled": {
+                color: "#d1d5db", // Color del texto cuando está deshabilitado
+                backgroundColor: "transparent", // Fondo transparente cuando está deshabilitado
+                border: "1px solid #d1d5db", // Borde gris cuando está deshabilitado
+                "&:hover": {
+                  backgroundColor: "transparent", // No hay hover cuando está deshabilitado
+                  color: "#d1d5db", // Color gris cuando está deshabilitado
+                },
+              },
+            }}
+          >
+            CREAR PRESUPUESTO
           </Button>
         </form>
 
