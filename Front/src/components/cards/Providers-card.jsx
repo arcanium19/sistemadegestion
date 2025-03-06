@@ -36,7 +36,7 @@ const ProviderCard = ({ provider, onEdit, onDelete, isDeleting }) => {
       </div>
 
       <div className="flex flex-row justify-end items-center mt-3 lg:mt-0">
-        <ButtonOption actionType="Editar" onClick={() => onEdit(provider.id)} />
+        <ButtonOption actionType="Editar" onClick={() => onEdit()} />
         <ButtonOption
           actionType="Borrar"
           isLoading={isDeleting}

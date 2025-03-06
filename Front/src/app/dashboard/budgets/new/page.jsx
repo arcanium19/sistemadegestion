@@ -15,6 +15,8 @@ import {
   InputAdornment,
 } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
+import ModalConfirm from "@/components/modals/ModalConfirm";
+import { useRouter } from "next/navigation";
 
 const CreateBudget = () => {
   const [formData, setFormData] = useState({
@@ -35,6 +37,9 @@ const CreateBudget = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalState, setModalState] = useState("waiting");
+  const router = useRouter();
 
   useEffect(() => {
     const fetchClients = async () => {
@@ -54,6 +59,33 @@ const CreateBudget = () => {
 
     fetchClients();
   }, []);
+
+  useEffect(() => {
+    if (modalState === "success") {
+      const timer = setTimeout(() => {
+        router.push("/dashboard/budgets");
+      }, 2000); // Espera 3 segundos
+
+      // Limpiar el temporizador si el componente se desmonta o cambia el estado
+      return () => clearTimeout(timer);
+    }
+  }, [modalState, router]);
+
+  useEffect(() => {
+	if (materials.length > 0) {
+	  let total_price = 0;
+	  materials.forEach((material) => {
+		total_price += material.total; // Calcular el total de cada material
+	  });
+  
+	  // Actualizar estimated_price en formData
+	  setFormData((prevFormData) => ({
+		...prevFormData,
+		estimated_price: total_price, // Actualizar el precio estimado
+	  }));
+	}
+  }, [materials]); // Ejecutar este efecto cada vez que cambien los materiales
+  
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -123,24 +155,40 @@ const CreateBudget = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      console.log("form_data: ", formData);
-      console.log("materials: ", materials);
-      const response = await axios.post(
-        `http://${process.env.NEXT_PUBLIC_HOST}:${process.env.NEXT_PUBLIC_PORT_BACKEND}/api/budget/`,
-        { ...formData, materials }
-      );
-      setSnackbarMessage(response.data.data || "Se creó exitósamente!");
-      setSnackbarSeverity("success");
-    } catch (error) {
-      setSnackbarMessage(
-        error.response?.data?.message || "Error al crear el presupuesto"
-      );
-      setSnackbarSeverity("error");
-    } finally {
-      setSnackbarOpen(true);
-    }
+    setIsModalOpen(true);
   };
+
+  const handleCreateBudget = async () => {
+	try {
+	  // Verificar si hay materiales
+	  if (materials.length < 1) {
+		setSnackbarMessage("Debe agregar al menos un material.");
+		setSnackbarSeverity("error");
+		setModalState("fail");
+		return;
+	  }
+  
+	  // Enviar los datos al backend
+	  const response = await axios.post(
+		`http://${process.env.NEXT_PUBLIC_HOST}:${process.env.NEXT_PUBLIC_PORT_BACKEND}/api/budget/`,
+		{ ...formData, materials }
+	  );
+  
+	  setSnackbarMessage(response.data.data || "Se creó exitósamente!");
+	  setSnackbarSeverity("success");
+	  setModalState("success");
+	} catch (error) {
+	  setSnackbarMessage(
+		error.response?.data?.message || "Error al crear el presupuesto"
+	  );
+	  setSnackbarSeverity("error");
+	  setModalState("fail");
+	} finally {
+	  setSnackbarOpen(true);
+	  setIsModalOpen(false);
+	}
+  };
+  
 
   const handleCloseSnackbar = () => {
     setSnackbarOpen(false);
@@ -777,6 +825,12 @@ const CreateBudget = () => {
           </Alert>
         </Snackbar>
       </Stack>
+      <ModalConfirm
+        isOpen={isModalOpen}
+        message="Desea crear un nuevo presupuesto?"
+        onClose={() => setIsModalOpen(false)}
+        onAccept={handleCreateBudget}
+      />
     </div>
   );
 };

@@ -9,6 +9,8 @@ import ButtonOption from "../buttons/ButtonOption";
 import ModalConfirm from "../modals/ModalConfirm";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
+import EditClientModal from "../modals/EditClient";
+import CreateClientModal from "../modals/CreateClient";
 
 const Clients = () => {
   const [clientsData, setClientsData] = useState({
@@ -26,7 +28,68 @@ const Clients = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false); // Estado de visibilidad del Snackbar
   const [snackbarMessage, setSnackbarMessage] = useState(""); // Mensaje de la alerta
   const [snackbarSeverity, setSnackbarSeverity] = useState("success"); // Severidad de la alerta (success, error, etc.)
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [clientToEdit, setClientToEdit] = useState(null);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [newClient, setNewClient] = useState({
+    name: "",
+    address: "",
+    contact: "",
+  });
   const router = useRouter();
+
+  const openCreateModal = () => setIsCreateModalOpen(true);
+  const closeCreateModal = () => {
+    setIsCreateModalOpen(false);
+    setNewClient({ name: "", address: "", contact: "" });
+  };
+
+  const openEditModal = (client) => {
+    setClientToEdit(client);
+    setIsEditModalOpen(true);
+  };
+
+  // Función para cerrar el modal
+  const closeEditModal = () => {
+    setIsEditModalOpen(false);
+    setClientToEdit(null);
+  };
+
+  const saveNewClient = async (clientData) => {
+    try {
+      await axios.post(
+        `http://${process.env.NEXT_PUBLIC_HOST}:${process.env.NEXT_PUBLIC_PORT_BACKEND}/api/client`,
+        clientData
+      );
+      setSnackbarMessage("Cliente creado con éxito");
+      setSnackbarSeverity("success");
+    } catch (error) {
+      setSnackbarMessage(error?.response?.data?.message || "Hubo un error");
+      setSnackbarSeverity("error");
+    } finally {
+      setSnackbarOpen(true);
+      closeCreateModal();
+      fetchClients(page); // Recargar la lista de clientes
+    }
+  };
+
+  const saveClientChanges = async (updatedClient) => {
+    try {
+      await axios.put(
+        `http://${process.env.NEXT_PUBLIC_HOST}:${process.env.NEXT_PUBLIC_PORT_BACKEND}/api/client/${clientToEdit.id}`,
+        updatedClient
+      );
+      setSnackbarMessage("Cliente actualizado con éxito");
+      setSnackbarSeverity("success");
+    } catch (error) {
+      setSnackbarMessage(error?.response?.data?.message || "Hubo un error");
+      setSnackbarSeverity("error");
+    } finally {
+      setSnackbarOpen(true);
+      closeEditModal();
+      fetchClients(page); // Recargar la lista de clientes
+    }
+  };
 
   // Función para obtener clientes
   const fetchClients = async (page) => {
@@ -42,7 +105,9 @@ const Clients = () => {
         response.data.data;
       setClientsData({ clients, totalItems, totalPages, currentPage });
     } catch (error) {
-      console.error("Error al obtener clientes:", error.message);
+      setSnackbarMessage(error?.response?.data?.message || "Hubo un error");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
     } finally {
       setLoadingPagination(false);
     }
@@ -119,7 +184,7 @@ const Clients = () => {
             <ButtonOption
               actionType="New"
               additionalText="NUEVO Cliente"
-              onClick={() => console.log("Nuevo cliente")}
+              onClick={openCreateModal}
             />
           </div>
           {clientsData.totalItems > 0 ? (
@@ -132,6 +197,7 @@ const Clients = () => {
                     <ClientCard
                       key={client.id}
                       client={client}
+                      onEdit={() => openEditModal(client)}
                       onDelete={() => openConfirmModal(client.id)}
                       onClick={() => handleClientClick(client.id)}
                       isDeleting={isDeleting && clientToDelete === client.id}
@@ -173,10 +239,25 @@ const Clients = () => {
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
         sx={{ marginX: 2, marginBottom: 2 }}
       >
-        <Alert onClose={handleCloseSnackbar} severity={snackbarSeverity} sx={{ width: "100%" }}>
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
           {snackbarMessage}
         </Alert>
       </Snackbar>
+      <EditClientModal
+        isOpen={isEditModalOpen}
+        client={clientToEdit}
+        onClose={closeEditModal}
+        onSave={saveClientChanges}
+      />
+      <CreateClientModal
+        isOpen={isCreateModalOpen}
+        onClose={closeCreateModal}
+        onCreate={saveNewClient}
+      />
     </div>
   );
 };

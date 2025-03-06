@@ -19,6 +19,13 @@ module.exports = async (req, res) => {
 
 	const transaction = await sequelize.transaction()
 
+	const client_found = await models.Client.findByPk(client_id, { transaction })
+
+	if (!client_found) {
+		await transaction.rollback()
+		throw new ClientError("No se encontró el cliente", 404)
+	}
+
 	const budget = await models.Budget.create({
 		name,
 		client_id,
@@ -35,13 +42,6 @@ module.exports = async (req, res) => {
 	if (!budget) {
 		await transaction.rollback();
 		throw new ClientError("Algunos datos son incorrectos, inténtelo de nuevo", 400)
-	}
-
-	const client_found = await models.Client.findByPk(client_id, { transaction })
-
-	if (!client_found) {
-		await transaction.rollback()
-		throw new ClientError("No se encontró el cliente", 404)
 	}
 
 	//linking client id

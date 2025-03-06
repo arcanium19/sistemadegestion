@@ -72,6 +72,7 @@ export default function Home() {
       {/* Right Side: Login Form */}
       <div className="w-full lg:w-1/5 lg:min-w-[500px] flex items-center justify-center bg-white px-8">
         <div className="max-w-sm w-full">
+			{/* <img src="./logoWeb.webp" alt="logo" width={200}/> */}
           <h2 className="text-3xl font-bold text-[#3B82F6] text-center mb-6">
             Hola, <span className="text-black">Bienvenido!</span>
           </h2>

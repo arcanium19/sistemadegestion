@@ -9,7 +9,8 @@ import ButtonOption from "../buttons/ButtonOption";
 import ModalConfirm from "../modals/ModalConfirm";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
-import Stack from "@mui/material/Stack";
+import CreateProviderModal from "../modals/CreateProvider";
+import EditProviderModal from "../modals/EditProvider";
 
 const Providers = () => {
   const [providersData, setProvidersData] = useState({
@@ -27,7 +28,63 @@ const Providers = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [selectedProvider, setSelectedProvider] = useState(null);
   const router = useRouter();
+
+  const handleOpenCreateModal = () => setIsCreateModalOpen(true);
+  const handleCloseCreateModal = () => setIsCreateModalOpen(false);
+
+  const handleOpenEditModal = (provider) => {
+	setSelectedProvider(provider);
+	setIsEditModalOpen(true);
+  };
+  
+  const handleCloseEditModal = () => {
+    setSelectedProvider(null);
+    setIsEditModalOpen(false);
+  };
+
+  const handleCreateProvider = async (newProvider) => {
+    try {
+      const response = await axios.post(
+        `http://${process.env.NEXT_PUBLIC_HOST}:${process.env.NEXT_PUBLIC_PORT_BACKEND}/api/provider`,
+        newProvider
+      );
+      setSnackbarMessage(response.data.data || "Proveedor creado con éxito");
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
+      fetchProviders(page); // Actualiza la lista después de crear
+      handleCloseCreateModal(); // Cierra el modal
+    } catch (error) {
+      setSnackbarMessage(
+        error?.response?.data?.message || "Error al crear proveedor"
+      );
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
+    }
+  };
+
+  const handleEditProvider = async (updatedProvider) => {
+    try {
+      const response = await axios.put(
+        `http://${process.env.NEXT_PUBLIC_HOST}:${process.env.NEXT_PUBLIC_PORT_BACKEND}/api/provider/${updatedProvider.id}`,
+        updatedProvider
+      );
+      setSnackbarMessage(response.data.data || "Proveedor actualizado con éxito");
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
+      fetchProviders(page); // Actualiza la lista después de editar
+      handleCloseEditModal(); // Cierra el modal
+    } catch (error) {
+      setSnackbarMessage(
+        error?.response?.data?.message || "Error al actualizar proveedor"
+      );
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
+    }
+  };
 
   // Función para obtener proveedores
   const fetchProviders = async (page) => {
@@ -43,7 +100,9 @@ const Providers = () => {
         response.data.data;
       setProvidersData({ providers, totalItems, totalPages, currentPage });
     } catch (error) {
-      console.error("Error al obtener proveedores:", error.message);
+      setSnackbarMessage(error?.response?.data?.message || "Hubo un error");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
     } finally {
       setLoadingPagination(false);
     }
@@ -66,7 +125,7 @@ const Providers = () => {
   };
 
   // Abrir el modal de confirmación
-  const openConfirmModal = (providerId) => {
+  const openConfirmDeleteModal = (providerId) => {
     setProviderToDelete(providerId);
     setIsModalOpen(true);
   };
@@ -81,7 +140,7 @@ const Providers = () => {
         `http://${process.env.NEXT_PUBLIC_HOST}:${process.env.NEXT_PUBLIC_PORT_BACKEND}/api/provider/${providerToDelete}`
       );
       // Mostrar mensaje de éxito
-      setSnackbarMessage("Proveedor eliminado con éxito");
+      setSnackbarMessage(response.data.data || "Proveedor eliminado con éxito");
       setSnackbarSeverity("success");
     } catch (error) {
       // Mostrar mensaje de error
@@ -120,7 +179,7 @@ const Providers = () => {
             <ButtonOption
               actionType="New"
               additionalText="NUEVO Proveedor"
-              onClick={() => console.log("Nuevo proveedor")}
+              onClick={handleOpenCreateModal}
             />
           </div>
           {providersData.totalItems > 0 ? (
@@ -133,9 +192,11 @@ const Providers = () => {
                     <ProviderCard
                       key={provider.id}
                       provider={provider}
-                      onDelete={() => openConfirmModal(provider.id)}
-                      onClick={() => handleProviderClick(provider.id)}
-                      isDeleting={isDeleting && providerToDelete === provider.id}
+                      onDelete={() => openConfirmDeleteModal(provider.id)}
+                      onEdit={() => handleOpenEditModal(provider)}
+                      isDeleting={
+                        isDeleting && providerToDelete === provider.id
+                      }
                     />
                   ))
                 )}
@@ -174,10 +235,26 @@ const Providers = () => {
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
         sx={{ marginX: 2, marginBottom: 2 }}
       >
-        <Alert onClose={handleCloseSnackbar} severity={snackbarSeverity} sx={{ width: "100%" }}>
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
           {snackbarMessage}
         </Alert>
       </Snackbar>
+      <CreateProviderModal
+        isOpen={isCreateModalOpen}
+        onClose={handleCloseCreateModal}
+        onCreate={handleCreateProvider}
+      />
+
+      <EditProviderModal
+        isOpen={isEditModalOpen}
+        onClose={handleCloseEditModal}
+        onUpdate={handleEditProvider}
+        providerData={selectedProvider}
+      />
     </div>
   );
 };

@@ -1,5 +1,5 @@
 import React from "react";
-import { Person, Phone, Email } from "@mui/icons-material";
+import { Person, Phone, LocationOn } from "@mui/icons-material";
 import ButtonOption from "../buttons/ButtonOption";
 
 const ClientCard = ({ client, onEdit, onDelete, isDeleting }) => {
@@ -26,8 +26,8 @@ const ClientCard = ({ client, onEdit, onDelete, isDeleting }) => {
       </div>
 
       <div className="flex items-center flex-grow text-left lg:min-w-[250px] lg:max-w-[250px]">
-        <Email sx={{ color: "white", fontSize: 20, marginRight: 1 }} />
-        <p>{client.email}</p>
+        <LocationOn sx={{ color: "white", fontSize: 20, marginRight: 1 }} />
+        <p>{client.address}</p>
       </div>
 
       <div className="flex items-center flex-grow text-left lg:min-w-[200px] lg:max-w-[200px]">

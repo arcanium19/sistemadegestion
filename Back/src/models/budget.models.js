@@ -19,10 +19,6 @@ module.exports = (sequelize) => {
 				key: 'id',
 			},
 		},
-		creation_date: {
-			type: DataTypes.DATE,
-			defaultValue: DataTypes.NOW,
-		},
 		location: {
 			type: DataTypes.STRING,
 			allowNull: true,
@@ -55,17 +51,6 @@ module.exports = (sequelize) => {
 			type: DataTypes.DECIMAL(10, 2)
 		}
 	});
-
-	// Budget.associate = (models) => {
-	// 	Budget.belongsTo(models.Client, {
-	// 		foreignKey: 'client_id',
-	// 		as: 'client',
-	// 	});
-	// 	Budget.hasOne(models.Project, {
-	// 		foreignKey: 'budget_id',
-	// 		as: 'project',
-	// 	});
-	// };
 
 	return Budget;
 };

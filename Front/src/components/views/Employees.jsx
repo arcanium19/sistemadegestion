@@ -41,7 +41,9 @@ const Employees = () => {
       const { employees, totalItems, totalPages, currentPage } = response.data.data;
       setEmployeesData({ employees, totalItems, totalPages, currentPage });
     } catch (error) {
-      console.error("Error al obtener empleados:", error.message);
+		setSnackbarMessage(error?.response?.data?.message || "Hubo un error");
+		setSnackbarSeverity("error");
+		setSnackbarOpen(true);
     } finally {
       setLoadingPagination(false);
     }

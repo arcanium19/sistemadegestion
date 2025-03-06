@@ -4,7 +4,7 @@ const middlewares = require('../middlewares')
 
 const budget_routes = Router()
 
-budget_routes.get('/', controllers.client.getAllClient)
+budget_routes.get('/', controllers.budget.getAllBudget)
 budget_routes.get('/:id', middlewares.uuidValidator, controllers.budget.getBudgetById)
 budget_routes.post('/', controllers.budget.createBudget)
 budget_routes.delete('/:id', middlewares.uuidValidator, controllers.budget.deleteBudget)
